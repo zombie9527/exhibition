@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>zombie作品集</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+	<link rel="shortcut icon" href="styles/favicon.ico">
+	<link rel="stylesheet" href="styles/reset.css">
+	<link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<h1 class="gh-page">
+	<span>一</span>
+	<span>些</span>
+	<span>作</span>
+	<span>品</span>
+</h1>
+<ul id="list"></ul>
+</div>
+
+<script>
+	var list = document.getElementById('list');
+
+	ajaxGet('data/data.json', function(data){
+		var dataList;
+		dataList = JSON.parse(data);
+		var html = '';
+		for(var i = 0; i < dataList.length; i++){
+			var str = '<li><a href='+dataList[i].href+' class="active" target="_block" rel="noopener noreferrer"/><h1>'+dataList[i].title+'</h1></a></li>';
+			html += str;
+		}
+		list.innerHTML = html;
+	});
+
+
+	function createXHR() {
+		var xhr = null;
+		if (window.XMLHttpRequest){
+			xhr = new XMLHttpRequest();
+		}
+		else{
+			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return xhr;
+	}
+	function ajaxGet(url, onsuccess, onfailure) {
+		var xhr = this.createXHR();
+		xhr.open("GET", url);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200){
+				if (typeof(onsuccess) === "function"){
+					if (xhr.responseXML === null){
+						onsuccess(xhr.responseText);
+					}else{
+						onsuccess(xhr.responseXML);
+					}
+				}
+			}
+		};
+		xhr.send();
+	}
+</script>
+
+</body>
+</html>
